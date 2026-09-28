@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}About Project & Model | Star Predictive Analysis{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">
+    <i class="fa-solid fa-circle-info" style="color: var(--accent-cyan);"></i> About Model & Astrophysical Principles
+  </h1>
+  <p class="page-subtitle">
+    Academic documentation, machine learning architecture, and stellar classification physics for college evaluation and defense.
+  </p>
+</div>
+
+<!-- Architecture & Algorithm Specification -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+  <!-- ML Architecture Card -->
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-microchip" style="color: var(--accent-purple); margin-right: 0.5rem;"></i> Machine Learning Architecture</span>
+      <span class="badge">Production Pipeline</span>
+    </div>
+
+    <div style="font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.85rem;">
+      <div>
+        <strong style="color: var(--text-bright);">Algorithm:</strong> Random Forest Classifier (100 Decision Trees)
+      </div>
+      <div>
+        <strong style="color: var(--text-bright);">Learning Paradigm:</strong> Supervised Multi-Class Classification
+      </div>
+      <div>
+        <strong style="color: var(--text-bright);">Ensemble Method:</strong> Bootstrap Aggregating (Bagging) with random feature subspace sampling
+      </div>
+      <div>
+        <strong style="color: var(--text-bright);">Input Dimension:</strong> 6 stellar features (4 continuous numerical + 2 categorical)
+      </div>
+      <div>
+        <strong style="color: var(--text-bright);">Output Space:</strong> 6 discrete stellar taxonomy classes (Brown Dwarf to Hypergiant)
+      </div>
+      <div>
+        <strong style="color: var(--text-bright);">Pre-processing Pipeline:</strong> Scikit-learn <code>ColumnTransformer</code> with <code>StandardScaler</code> for numerical attributes and <code>OneHotEncoder(handle_unknown='ignore')</code> for categorical attributes.
+      </div>
+      <div>
+        <strong style="color: var(--text-bright);">Evaluation Split:</strong> 80% Training (192 stars) / 20% Testing (48 stars), Stratified.
+      </div>
+    </div>
+  </div>
+
+  <!-- Random Forest Simple Explanation for Faculty -->
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-chalkboard-user" style="color: var(--accent-amber); margin-right: 0.5rem;"></i> Algorithm Explanation for Presentation</span>
+      <span class="badge">Viva-Ready</span>
+    </div>
+
+    <blockquote style="border-left: 3px solid var(--accent-cyan); padding-left: 1rem; color: var(--text-main); font-style: italic; margin-bottom: 1rem; line-height: 1.7; font-size: 0.95rem;">
+      "Random Forest combines predictions from multiple decision trees. Each tree analyzes the input features independently on a random bootstrap sample, and the combined majority vote (and average class probability) determines the final predicted star type."
+    </blockquote>
+
+    <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+      <p style="margin-bottom: 0.5rem;"><strong style="color: var(--accent-cyan);">Why Random Forest for this problem?</strong></p>
+      <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+        <li>Handles severe non-linear physical relationships across stellar regimes.</li>
+        <li>Provides built-in resistance to overfitting on tabular astronomy data.</li>
+        <li>Generates mathematically rigorous class probabilities via <code>predict_proba()</code>.</li>
+        <li>Provides explicit Gini impurity feature importance ranking.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Detailed Star Taxonomy Reference -->
+<div class="card" style="margin-bottom: 2rem;">
+  <div class="card-title">
+    <span><i class="fa-solid fa-star-half-stroke" style="color: var(--accent-cyan); margin-right: 0.5rem;"></i> The Six Stellar Taxonomies</span>
+    <span class="badge">Astrophysical Reference</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+    {% for cls_name, info in class_descriptions.items() %}
+    <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.2rem; border-top: 3px solid {{ info.color }};">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <h3 style="font-size: 1.1rem; color: var(--text-bright); font-weight: 700;">{{ cls_name }}</h3>
+        <span style="font-size: 0.75rem; color: {{ info.color }}; font-weight: 600;">{{ info.classification }}</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+        {{ info.summary }}
+      </p>
+      <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--text-dim);">
+        <div><strong style="color: var(--text-muted);">Fusion Status:</strong> {{ info.core_fusion }}</div>
+        <div><strong style="color: var(--text-muted);">Typical Temp:</strong> {{ info.typical_temp }} &bull; <strong style="color: var(--text-muted);">Luminosity:</strong> {{ info.luminosity_range }}</div>
+        <div><strong style="color: var(--text-muted);">Typical Radius:</strong> {{ info.typical_radius }}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Astrophysical Context: HR Diagram & Harvard Spectral Sequence -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-palette" style="color: var(--accent-pink); margin-right: 0.5rem;"></i> Harvard Spectral Classification</span>
+      <span class="badge">O B A F G K M</span>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0.85rem;">
+      The canonical stellar temperature mnemonic: <em>"Oh Be A Fine Girl/Guy, Kiss Me"</em>:
+    </p>
+    <div class="table-responsive">
+      <table class="table" style="font-size: 0.82rem;">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Surface Temp (K)</th>
+            <th>True Color</th>
+            <th>Prominent Spectral Lines</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong style="color: #60a5fa;">O</strong></td><td>&gt; 30,000</td><td>Blue</td><td>Ionized Helium (He II), neutral He</td></tr>
+          <tr><td><strong style="color: #93c5fd;">B</strong></td><td>10,000 - 30,000</td><td>Blue-White</td><td>Neutral Helium (He I), Hydrogen</td></tr>
+          <tr><td><strong style="color: #e2e8f0;">A</strong></td><td>7,500 - 10,000</td><td>White</td><td>Strong Balmer Hydrogen lines</td></tr>
+          <tr><td><strong style="color: #fef08a;">F</strong></td><td>6,000 - 7,500</td><td>Yellow-White</td><td>Ionized Calcium (Ca II), Hydrogen</td></tr>
+          <tr><td><strong style="color: #fde047;">G</strong></td><td>5,200 - 6,000</td><td>Yellow (Solar)</td><td>Neutral/Ionized Metals, Ca II</td></tr>
+          <tr><td><strong style="color: #fb923c;">K</strong></td><td>3,700 - 5,200</td><td>Orange</td><td>Metallic lines, Titanium Oxide (TiO)</td></tr>
+          <tr><td><strong style="color: #f87171;">M</strong></td><td>2,400 - 3,700</td><td>Red</td><td>Dense Titanium Oxide absorption bands</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-graduation-cap" style="color: var(--accent-emerald); margin-right: 0.5rem;"></i> Academic Dataset Reference</span>
+      <span class="badge">Kaggle Open Data</span>
+    </div>
+    <div style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+      <p style="margin-bottom: 0.75rem;">
+        This prototype utilizes the <strong>Star Dataset to Predict Star Type</strong> authored by <em>Deepraj Baidya</em>, published on Kaggle.
+      </p>
+      <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.9rem; margin-bottom: 0.75rem;">
+        <div><strong>Dataset URL:</strong> <a href="https://www.kaggle.com/datasets/deepu1109/star-dataset" target="_blank" style="color: var(--accent-cyan); text-decoration: none;">kaggle.com/datasets/deepu1109/star-dataset</a></div>
+        <div><strong>Total Observations:</strong> 240 stellar objects</div>
+        <div><strong>Balance:</strong> Exactly 40 samples per class</div>
+        <div><strong>Missing Attributes:</strong> 0 (Clean & verified)</div>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-dim);">
+        The dataset combines astronomical models and stellar catalog measurements to benchmark multi-class machine learning classifiers on complex non-linear astronomical parameters.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

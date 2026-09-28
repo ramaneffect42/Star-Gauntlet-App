@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Star Predictive Analysis{% endblock %} | Stellar ML Terminal</title>
+  
+  <!-- Monospace & Sans Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Sparse Astronomical Background Points -->
+  <canvas id="star-canvas"></canvas>
+
+  <div class="app-wrapper">
+    <!-- Minimal Terminal Navigation -->
+    <header class="navbar">
+      <div class="nav-container">
+        <a href="{{ url_for('index') }}" class="brand">
+          <span class="brand-marker">[SYS]</span>
+          <span class="brand-title">STAR PREDICTIVE ANALYSIS</span>
+        </a>
+
+        <nav>
+          <ul class="nav-menu">
+            <li>
+              <a href="{{ url_for('index') }}" class="nav-link {% if active_page == 'dashboard' %}active{% endif %}">
+                [ OVERVIEW ]
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('analysis_page') }}" class="nav-link {% if active_page == 'analysis' %}active{% endif %}">
+                [ ANALYSIS ]
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('dataset_page') }}" class="nav-link {% if active_page == 'dataset' %}active{% endif %}">
+                [ DATASET ]
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Content Slot -->
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Minimal Terminal Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div>
+          <span>STAR-ML // PROTO-BUILD 2026</span> &bull; <span>SCIENTIFIC TAXONOMY TERMINAL</span>
+        </div>
+        <div>
+          <span>SOURCE: KAGGLE (DEEPRAJ BAIDYA)</span> &bull; <span>ESTIMATOR: SCIKIT-LEARN RANDOM FOREST</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

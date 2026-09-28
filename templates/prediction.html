@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Star Prediction | Star Predictive Analysis{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">
+    <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> Predict Star Type
+  </h1>
+  <p class="page-subtitle">
+    Input astronomical measurements or load representative catalog stars to classify stellar category with real-time confidence scores.
+  </p>
+</div>
+
+<!-- Demo Mode Presets Bar -->
+<div class="card" style="margin-bottom: 2rem; background: linear-gradient(145deg, rgba(17, 24, 39, 0.95), rgba(30, 41, 59, 0.6)); border-color: rgba(56, 189, 248, 0.25);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 0.92rem; color: var(--accent-cyan);">
+      <i class="fa-solid fa-flask"></i> Presentation Demo Mode: Click to Load Real Examples
+    </div>
+    <span style="font-size: 0.76rem; color: var(--text-dim);">Sourced directly from Kaggle dataset</span>
+  </div>
+
+  <div class="demo-preset-group" id="demoPresetsContainer">
+    <!-- Populated by JS -->
+    <span style="color: var(--text-dim); font-size: 0.85rem;">Loading presentation presets...</span>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 1.5rem; align-items: start;">
+  <!-- Left Column: Input Form -->
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-sliders" style="color: var(--accent-cyan); margin-right: 0.5rem;"></i> Stellar Parameters</span>
+      <span class="badge">6 Input Features</span>
+    </div>
+
+    <form id="predictionForm">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <!-- Temperature -->
+        <div class="form-group">
+          <label class="form-label" for="inputTemperature">
+            Temperature <span class="unit">(K)</span>
+          </label>
+          <input type="number" step="any" min="500" max="150000" id="inputTemperature" class="form-control" placeholder="e.g. 3500" required>
+          <div class="input-hint">Range: 1,900 - 40,000+ K</div>
+        </div>
+
+        <!-- Luminosity -->
+        <div class="form-group">
+          <label class="form-label" for="inputLuminosity">
+            Luminosity <span class="unit">(L/L☉)</span>
+          </label>
+          <input type="number" step="any" min="0.00001" max="5000000" id="inputLuminosity" class="form-control" placeholder="e.g. 0.01" required>
+          <div class="input-hint">Solar units (Sun = 1.0)</div>
+        </div>
+
+        <!-- Radius -->
+        <div class="form-group">
+          <label class="form-label" for="inputRadius">
+            Radius <span class="unit">(R/R☉)</span>
+          </label>
+          <input type="number" step="any" min="0.001" max="10000" id="inputRadius" class="form-control" placeholder="e.g. 0.5" required>
+          <div class="input-hint">Solar units (Sun = 1.0)</div>
+        </div>
+
+        <!-- Absolute Magnitude -->
+        <div class="form-group">
+          <label class="form-label" for="inputMagnitude">
+            Absolute Magnitude <span class="unit">(Mv)</span>
+          </label>
+          <input type="number" step="any" min="-25" max="35" id="inputMagnitude" class="form-control" placeholder="e.g. 10.5" required>
+          <div class="input-hint">Lower/negative = brighter</div>
+        </div>
+
+        <!-- Spectral Class -->
+        <div class="form-group">
+          <label class="form-label" for="inputSpectralClass">
+            Spectral Class
+          </label>
+          <select id="inputSpectralClass" class="form-control" required>
+            {% for sc in spectral_classes %}
+            <option value="{{ sc }}">{{ sc }}</option>
+            {% endfor %}
+          </select>
+          <div class="input-hint">Harvard sequence (OBAFGKM)</div>
+        </div>
+
+        <!-- Star Colour -->
+        <div class="form-group">
+          <label class="form-label" for="inputColor">
+            Star Colour
+          </label>
+          <select id="inputColor" class="form-control" required>
+            {% for c in star_colors %}
+            <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+          </select>
+          <div class="input-hint">Visual radiation hue</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+        <button type="submit" id="btnPredict" class="btn btn-primary btn-lg" style="flex: 1;">
+          <i class="fa-solid fa-bullseye"></i> PREDICT STAR TYPE
+        </button>
+        <button type="button" id="btnReset" class="btn btn-secondary btn-lg">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right Column: Prediction Results -->
+  <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+    <!-- Result Card -->
+    <div class="card" id="resultCard" style="display: none; border-color: var(--border-glow);">
+      <div style="text-align: center; padding: 0.5rem 0 1rem; border-bottom: 1px solid var(--border-subtle);">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em;">
+          PREDICTED STAR TYPE
+        </div>
+        <div id="resultTypeName" style="font-size: 2.2rem; font-weight: 800; color: var(--accent-cyan); margin: 0.35rem 0;">
+          --
+        </div>
+        <div id="resultBadge" class="badge-class" style="font-size: 0.85rem; padding: 0.35rem 1rem;">
+          --
+        </div>
+        <div id="resultClassSummary" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; max-width: 440px; margin-left: auto; margin-right: auto;">
+          --
+        </div>
+      </div>
+
+      <!-- Real Confidence Distribution -->
+      <div style="padding-top: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <span style="font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-bright);">
+            <i class="fa-solid fa-chart-simple" style="color: var(--accent-cyan); margin-right: 0.4rem;"></i> Prediction Confidence
+          </span>
+          <span id="topConfidenceBadge" style="font-size: 0.82rem; font-weight: 700; color: var(--accent-emerald);">
+            --% Match
+          </span>
+        </div>
+
+        <div class="prob-list" id="probListContainer">
+          <!-- Probability bars populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State Placeholder when no prediction made yet -->
+    <div class="card" id="emptyResultPlaceholder" style="text-align: center; padding: 3rem 1.5rem;">
+      <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(56, 189, 248, 0.08); border: 1px dashed rgba(56, 189, 248, 0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; font-size: 1.8rem; color: var(--accent-cyan);">
+        <i class="fa-solid fa-telescope"></i>
+      </div>
+      <h3 style="font-size: 1.15rem; color: var(--text-bright); margin-bottom: 0.5rem;">Awaiting Stellar Input</h3>
+      <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 380px; margin: 0 auto;">
+        Enter astrophysical properties on the left or click any demo preset above to generate classification and confidence probabilities.
+      </p>
+    </div>
+
+    <!-- "Why This Prediction?" Explanation Section -->
+    <div class="card" id="explanationCard" style="display: none;">
+      <div class="card-title">
+        <span><i class="fa-solid fa-circle-question" style="color: var(--accent-amber); margin-right: 0.5rem;"></i> Why this prediction?</span>
+      </div>
+
+      <div style="font-size: 0.85rem; margin-bottom: 1rem;">
+        <div style="font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem;">SUBMITTED ASTRONOMICAL PROPERTIES:</div>
+        <div class="table-responsive">
+          <table class="table" style="font-size: 0.8rem;">
+            <tbody id="submittedFeaturesTbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.9rem; font-size: 0.85rem; line-height: 1.5;">
+        <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.3rem;">
+          <i class="fa-solid fa-atom"></i> Astrophysical & Model Reasoning:
+        </div>
+        <p id="explainHrPosition" style="color: var(--text-main); margin-bottom: 0.5rem;">--</p>
+        <p id="explainMlReasoning" style="color: var(--text-muted); margin-bottom: 0.5rem;">--</p>
+        <p id="explainScientificNote" style="color: var(--text-dim); font-size: 0.78rem; font-style: italic;">--</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/prediction.js') }}"></script>
+{% endblock %}

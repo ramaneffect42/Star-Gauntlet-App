@@ -1,0 +1,668 @@
+/* ==========================================================================
+   STAR PREDICTIVE ANALYSIS - MINIMAL SCIENTIFIC TERMINAL THEME
+   Visual Direction: Minimal. Terminal-inspired. Precise. Scientific. Dark. Quiet.
+   ========================================================================== */
+
+:root {
+  --bg-black: #000000;
+  --bg-surface: #050505;
+  --bg-surface-alt: #0a0a0a;
+  --bg-input: #000000;
+
+  --border-subtle: #1c1c1c;
+  --border-medium: #2a2a2a;
+  --border-strong: #444444;
+
+  --text-white: #ffffff;
+  --text-gray-1: #b0b0b0;
+  --text-gray-2: #808080;
+  --text-gray-3: #505050;
+
+  --accent-green: #22c55e;
+  --accent-amber: #eab308;
+  --accent-red: #ef4444;
+  --accent-cyan: #94a3b8;
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important; /* Strict 90-degree corners */
+}
+
+body {
+  background-color: var(--bg-black);
+  color: var(--text-white);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+/* Background canvas for sparse 1px outer astronomical points */
+#star-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app-wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   NAVIGATION BAR (MINIMAL TERMINAL)
+   ========================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-black);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.85rem 2rem;
+}
+
+.nav-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-white);
+}
+
+.brand-marker {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-green);
+  border: 1px solid var(--border-medium);
+  padding: 2px 6px;
+  background: var(--bg-surface);
+}
+
+.brand-title {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-white);
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 0.25rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-gray-1);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  letter-spacing: 0.04em;
+}
+
+.nav-link:hover {
+  color: var(--text-white);
+  border-color: var(--border-medium);
+  background: var(--bg-surface-alt);
+}
+
+.nav-link.active {
+  color: var(--text-white);
+  border-color: var(--text-white);
+  background: var(--bg-surface);
+}
+
+/* ==========================================
+   LAYOUT CONTAINERS & TYPOGRAPHY
+   ========================================== */
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  flex: 1;
+  width: 100%;
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 1.5rem;
+}
+
+.page-title {
+  font-family: var(--font-mono);
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-white);
+  text-transform: uppercase;
+}
+
+.page-subtitle {
+  color: var(--text-gray-1);
+  font-size: 0.92rem;
+  margin-top: 0.4rem;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-gray-2);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-label::before {
+  content: '>';
+  color: var(--accent-green);
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2.5rem 0;
+}
+
+/* ==========================================
+   TERMINAL PANELS / SECTIONS
+   ========================================== */
+.term-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.term-panel-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-white);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.6rem;
+}
+
+.term-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border: 1px solid var(--border-medium);
+  color: var(--text-gray-1);
+  background: var(--bg-black);
+}
+
+.term-tag.ready {
+  color: var(--accent-green);
+  border-color: #1a4d2e;
+}
+
+.term-tag.running {
+  color: var(--accent-amber);
+  border-color: #4d401a;
+}
+
+.term-tag.waiting {
+  color: var(--text-gray-3);
+  border-color: #222;
+}
+
+/* Technical Metrics Grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  background: var(--bg-surface);
+  padding: 1.25rem 1.25rem;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-gray-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-white);
+  line-height: 1.1;
+  margin: 0.35rem 0 0.15rem;
+}
+
+.stat-sub {
+  font-size: 0.74rem;
+  color: var(--text-gray-3);
+  font-family: var(--font-mono);
+}
+
+/* ==========================================
+   BUTTONS (PRECISE & SHARP)
+   ========================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface-alt);
+  color: var(--text-white);
+  outline: none;
+}
+
+.btn:hover {
+  background: #181818;
+  border-color: var(--text-gray-1);
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Primary High-Contrast Button */
+.btn-primary {
+  background: var(--text-white);
+  color: var(--bg-black);
+  border: 1px solid var(--text-white);
+  font-weight: 700;
+}
+
+.btn-primary:hover {
+  background: #e0e0e0;
+  border-color: #e0e0e0;
+  color: var(--bg-black);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.btn-lg {
+  padding: 0.9rem 2.2rem;
+  font-size: 0.95rem;
+}
+
+/* ==========================================
+   FORMS & INPUTS (SHARP TERMINAL)
+   ========================================== */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-gray-1);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-label span.unit {
+  color: var(--text-gray-2);
+  font-weight: normal;
+  text-transform: none;
+}
+
+.form-control {
+  width: 100%;
+  background: var(--bg-black);
+  border: 1px solid var(--border-medium);
+  padding: 0.65rem 0.85rem;
+  color: var(--text-white);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.form-control:focus {
+  border-color: var(--text-white);
+}
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='square'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.85em;
+  padding-right: 2rem;
+}
+
+.input-hint {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-gray-3);
+  margin-top: 0.35rem;
+}
+
+/* ==========================================
+   PIPELINE STAGES & EXECUTION CONSOLE
+   ========================================== */
+.pipeline-track {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 2rem;
+}
+
+.pipeline-stage {
+  background: var(--bg-surface);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.pipeline-stage.active {
+  border-left-color: var(--accent-amber);
+  background: #0c0b05;
+}
+
+.pipeline-stage.complete {
+  border-left-color: var(--accent-green);
+  background: var(--bg-surface);
+}
+
+.pipeline-stage.pending {
+  border-left-color: var(--border-subtle);
+  color: var(--text-gray-3);
+}
+
+.stage-name {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stage-num {
+  color: var(--text-gray-3);
+  font-weight: 700;
+}
+
+/* Monospace Execution Console */
+.exec-console {
+  background: #000000;
+  border: 1px solid var(--border-medium);
+  padding: 1rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: var(--text-gray-1);
+  min-height: 160px;
+  max-height: 240px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.exec-console .prompt {
+  color: var(--accent-green);
+}
+
+.exec-console .status-ok {
+  color: var(--accent-green);
+  font-weight: 700;
+}
+
+.exec-console .status-run {
+  color: var(--accent-amber);
+  font-weight: 700;
+}
+
+/* ==========================================
+   TABLES (SHARP TECHNICAL GRID)
+   ========================================== */
+.table-responsive {
+  overflow-x: auto;
+  border: 1px solid var(--border-subtle);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.table th {
+  background: #050505;
+  color: var(--text-gray-2);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-medium);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-white);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.table tr:hover td {
+  background: var(--bg-surface-alt);
+}
+
+/* ==========================================
+   CONFUSION MATRIX (SHARP MONOSPACE GRID)
+   ========================================== */
+.matrix-container {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.matrix-table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.matrix-table th {
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-gray-2);
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+  background: #050505;
+}
+
+.matrix-cell {
+  width: 52px;
+  height: 44px;
+  text-align: center;
+  vertical-align: middle;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.matrix-cell.correct {
+  background: #0a1f0f;
+  color: var(--accent-green);
+  border-color: #1a4d2e;
+}
+
+.matrix-cell.zero {
+  background: #030303;
+  color: var(--text-gray-3);
+}
+
+.matrix-cell.error {
+  background: #2a0808;
+  color: var(--accent-red);
+  border-color: #661a1a;
+}
+
+/* ==========================================
+   PRESET BUTTONS
+   ========================================== */
+.preset-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-preset {
+  background: var(--bg-black);
+  border: 1px solid var(--border-medium);
+  color: var(--text-gray-1);
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-preset:hover {
+  background: #141414;
+  border-color: var(--text-white);
+  color: var(--text-white);
+}
+
+/* ==========================================
+   PROBABILITY BARS (MINIMAL FLAT)
+   ========================================== */
+.prob-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.prob-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.prob-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.prob-track {
+  width: 100%;
+  height: 6px;
+  background: #111111;
+  border: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.prob-fill {
+  height: 100%;
+  background: var(--text-white);
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-black);
+  padding: 1.25rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-gray-2);
+}
+
+.footer-content {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ==========================================
+   RESPONSIVENESS
+   ========================================== */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+  .container {
+    padding: 1.5rem 1rem;
+  }
+}

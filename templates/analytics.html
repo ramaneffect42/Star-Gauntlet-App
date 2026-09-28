@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Astrophysical Analytics & HR Diagrams | Star Predictive Analysis{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">
+    <i class="fa-solid fa-chart-line" style="color: var(--accent-cyan);"></i> Stellar Analytics & Hertzsprung-Russell Visualizations
+  </h1>
+  <p class="page-subtitle">
+    Astrophysical distributions and observational diagrams computed directly from the 240 stellar catalog observations.
+  </p>
+</div>
+
+<!-- Grid of 5 Charts -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+  <!-- Chart 1: Star Type Distribution -->
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-chart-column" style="color: var(--accent-cyan); margin-right: 0.5rem;"></i> Chart 1 — Star Type Distribution</span>
+      <span class="badge">N = 240</span>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.75rem;">
+      Balanced distribution of 40 stars per category across all 6 taxonomic classes.
+    </p>
+    <div style="position: relative; height: 300px;">
+      <canvas id="chartDistribution"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 5: Feature Importance -->
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-ranking-star" style="color: var(--accent-purple); margin-right: 0.5rem;"></i> Chart 5 — Random Forest Feature Importance</span>
+      <span class="badge">Model Weights</span>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.75rem;">
+      Relative predictive power of individual stellar features in classifying star types.
+    </p>
+    <div style="position: relative; height: 300px;">
+      <canvas id="chartFeatureImportance"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart 4: Absolute Magnitude vs Temperature (Hertzsprung-Russell Diagram) - Full Width Highlight -->
+<div class="card" style="margin-bottom: 2rem; border-color: rgba(56, 189, 248, 0.25);">
+  <div class="card-title">
+    <span><i class="fa-solid fa-atom" style="color: var(--accent-amber); margin-right: 0.5rem;"></i> Chart 4 — Hertzsprung-Russell Diagram (Absolute Magnitude vs Temperature)</span>
+    <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">Astrophysical Classic</span>
+  </div>
+  <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 0.75rem;">
+    The fundamental diagram of astrophysics. Note that the Y-axis is inverted (lower/negative magnitudes are more luminous stars at the top), and temperature spans the hot O/B stars on the right to cool M stars on the left.
+  </p>
+  <div style="position: relative; height: 380px;">
+    <canvas id="chartHrDiagram"></canvas>
+  </div>
+  <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 0.75rem;">
+    <i class="fa-solid fa-circle-info" style="color: var(--accent-cyan);"></i> Notice the distinct separation: Hypergiants & Supergiants sit at the bright top (negative magnitude), Main Sequence forms a diagonal belt, and White Dwarfs linger in the hot yet dim bottom region.
+  </div>
+</div>
+
+<!-- Row with Chart 2 and Chart 3 -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+  <!-- Chart 2: Temperature vs Luminosity -->
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-sun" style="color: var(--accent-emerald); margin-right: 0.5rem;"></i> Chart 2 — Temperature vs Luminosity</span>
+      <span class="badge">Log Scale (L☉)</span>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.75rem;">
+      Scatter plot comparing stellar surface temperature against total radiated power output.
+    </p>
+    <div style="position: relative; height: 320px;">
+      <canvas id="chartTempVsLum"></canvas>
+    </div>
+  </div>
+
+  <!-- Chart 3: Temperature vs Radius -->
+  <div class="card">
+    <div class="card-title">
+      <span><i class="fa-solid fa-arrows-up-down-left-right" style="color: var(--accent-pink); margin-right: 0.5rem;"></i> Chart 3 — Temperature vs Radius</span>
+      <span class="badge">Log Scale (R☉)</span>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.75rem;">
+      Scatter plot highlighting stellar volume spans from 0.01 R☉ (White Dwarfs) to 1,900 R☉ (Hypergiants).
+    </p>
+    <div style="position: relative; height: 320px;">
+      <canvas id="chartTempVsRad"></canvas>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

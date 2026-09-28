@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Dataset Catalog | Star Predictive Analysis{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem;">
+    [ REPOSITORY ] // ASTRONOMICAL CATALOG
+  </div>
+  <h1 class="page-title">STELLAR DATASET CATALOG</h1>
+  <p class="page-subtitle">
+    Inspection of the 240 astronomical observations sourced from the Kaggle Stellar Taxonomy repository.
+  </p>
+</div>
+
+<!-- Technical Stat Grid -->
+<div class="stat-grid">
+  <div class="stat-box">
+    <div class="stat-label">Total Records</div>
+    <div class="stat-value">240</div>
+    <div class="stat-sub">Balanced 40 / class</div>
+  </div>
+
+  <div class="stat-box">
+    <div class="stat-label">Features</div>
+    <div class="stat-value">6</div>
+    <div class="stat-sub">4 Numerical + 2 Categorical</div>
+  </div>
+
+  <div class="stat-box">
+    <div class="stat-label">Missing Values</div>
+    <div class="stat-value" style="color: var(--accent-green);">0</div>
+    <div class="stat-sub">100% Complete & Clean</div>
+  </div>
+
+  <div class="stat-box">
+    <div class="stat-label">Taxonomic Classes</div>
+    <div class="stat-value">6</div>
+    <div class="stat-sub">Dwarfs to Hypergiants</div>
+  </div>
+</div>
+
+<!-- Numerical Statistics Table -->
+<div class="term-panel" style="margin-bottom: 2rem;">
+  <div class="term-panel-title">
+    <span>PARAMETRIC SUMMARY STATISTICS // CONTINUOUS FEATURES</span>
+    <span class="term-tag">[ 4 PHYSICAL FEATURES ]</span>
+  </div>
+  <div class="table-responsive">
+    <table class="table" id="stats-table">
+      <thead>
+        <tr>
+          <th>FEATURE</th>
+          <th>PHYSICAL UNIT</th>
+          <th>MEAN</th>
+          <th>STD DEV</th>
+          <th>MINIMUM</th>
+          <th>MAXIMUM</th>
+        </tr>
+      </thead>
+      <tbody id="stats-tbody">
+        <!-- Populated by JS -->
+        <tr><td colspan="6" style="text-align: center; color: var(--text-gray-2);">Loading parametric statistics...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Class Balance Distribution -->
+<div class="term-panel" style="margin-bottom: 2rem;">
+  <div class="term-panel-title">
+    <span>CLASS DISTRIBUTION BREAKDOWN</span>
+    <span class="term-tag">[ UNIFORM BALANCE ]</span>
+  </div>
+  <div id="classDistBars" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; font-family: var(--font-mono); font-size: 0.8rem;">
+    <!-- Populated by JS -->
+  </div>
+</div>
+
+<!-- Search & Records Table -->
+<div class="term-panel">
+  <div class="term-panel-title">
+    <span>CATALOG OBSERVATIONS</span>
+    <div style="display: flex; gap: 0.75rem; align-items: center;">
+      <input type="text" id="tableSearch" placeholder="Search parameters..." class="form-control" style="width: 220px; padding: 0.35rem 0.65rem; font-size: 0.78rem;">
+      <select id="classFilter" class="form-control" style="width: 170px; padding: 0.35rem 0.65rem; font-size: 0.78rem;">
+        <option value="all">ALL CLASSES</option>
+        {% for cls in star_classes %}
+        <option value="{{ cls }}">{{ cls.upper() }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+    <table class="table" id="records-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>TEMP (K)</th>
+          <th>LUM (L/L☉)</th>
+          <th>RADIUS (R/R☉)</th>
+          <th>ABS MAG (Mv)</th>
+          <th>SPECTRAL</th>
+          <th>COLOUR</th>
+          <th>STAR TYPE</th>
+        </tr>
+      </thead>
+      <tbody id="records-tbody">
+        <tr><td colspan="8" style="text-align: center; color: var(--text-gray-2);">Loading records...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-gray-2);">
+    <div id="recordCountInfo">Showing 0 of 0 records</div>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+      <button class="btn btn-sm" id="btnPrevPage" disabled>[ &larr; PREV ]</button>
+      <span id="pageIndicator" style="padding: 0 0.5rem;">PAGE 1</span>
+      <button class="btn btn-sm" id="btnNextPage">[ NEXT &rarr; ]</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dataset.js') }}"></script>
+{% endblock %}
